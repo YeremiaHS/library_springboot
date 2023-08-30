@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import id.fazzbca.libraryjava.version.models.Books;
 import id.fazzbca.libraryjava.version.models.Peminjaman;
+import id.fazzbca.libraryjava.version.models.Pengembalian;
 import id.fazzbca.libraryjava.version.payloads.req.PengembalianRequest;
+import id.fazzbca.libraryjava.version.payloads.res.ResponseHandler;
 import id.fazzbca.libraryjava.version.repositories.BookRepository;
 import id.fazzbca.libraryjava.version.repositories.PeminjamanRepository;
 import id.fazzbca.libraryjava.version.repositories.PengembalianRepository;
@@ -33,9 +35,9 @@ public class PengembalianServiceImpl implements PengembalianService{
             throw new NoSuchElementException("peminjaman tak ditemukan");
         }
 
-        Peminjaman peminjaman = peminjamanRepository.findById(request.getPeminjaman().orElseThrow(()-> {
+        Peminjaman peminjaman = peminjamanRepository.findById(request.getPeminjaman()).orElseThrow(()-> {
             throw new NoSuchElementException("Peminjaman tak ditemukan");
-        }));
+        });
 
         if (peminjaman.getIsDeleted()) {
             throw new NoSuchElementException("Buku tak ditemukan");
@@ -43,10 +45,14 @@ public class PengembalianServiceImpl implements PengembalianService{
 
         peminjaman.setIsDeleted(true);
 
-        Books book = bookRepository.findByTitle(peminjaman.getBook().orElseThrow(()-> {
-            throw new NoSuchElementException("buku tak ditemukan");
-        }));
+        Books book = peminjaman.getBook();
 
         book.setDeleted(false);
+
+        Pengembalian pengembalian = new Pengembalian(peminjaman);
+
+        pengembalianRepository.save(pengembalian);
+
+        return ResponseHandler.responseMessage(201, "berhasil melakukan pengembalian", true);
     }
 }
