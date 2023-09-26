@@ -40,7 +40,7 @@ public class PengembalianServiceImpl implements PengembalianService{
         });
 
         if (peminjaman.getIsDeleted()) {
-            throw new NoSuchElementException("Buku tak ditemukan");
+            throw new NoSuchElementException("Peminjaman tak ditemukan");
         }
 
         peminjaman.setIsDeleted(true);
