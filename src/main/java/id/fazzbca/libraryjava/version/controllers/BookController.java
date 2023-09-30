@@ -23,7 +23,7 @@ public class BookController {
     @Autowired
     BookService bookService;
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<?> createBook(@RequestBody @Valid BookRequest request){
         //try {
             return bookService.addBookService(request);
@@ -35,7 +35,7 @@ public class BookController {
     @GetMapping("/available")
     public ResponseEntity<?> getBooks(@RequestParam(value = "deleted", defaultValue = "") Boolean isDeleted){
         //try {
-            return bookService.getBookService(isDeleted);
+            return bookService.getBookService();
         // } catch (Exception e) {
         //     return ResponseHandler.responseError(500, e.getMessage(), null);
         // }
@@ -50,7 +50,7 @@ public class BookController {
         // }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updaetBooksById(@PathVariable String id, @RequestBody @Valid BookRequest request){
         //try {
             return bookService.updateBookByID(id, request);

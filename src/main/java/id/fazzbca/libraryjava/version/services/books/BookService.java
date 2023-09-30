@@ -9,7 +9,7 @@ public interface BookService {
     ResponseEntity<?> addBookService(BookRequest request);
 
     //get all book by status deleted
-    ResponseEntity<?> getBookService(Boolean isDeleted);
+    ResponseEntity<?> getBookService();
 
     //get book by id
     ResponseEntity<?> getBookById(String id);

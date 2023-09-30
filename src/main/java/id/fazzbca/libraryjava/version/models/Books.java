@@ -26,11 +26,14 @@ public class Books {
     @UuidGenerator
     private String id;
 
+    @Column
+    private String imgUrl;
+
     @Column(length = 100)
     private String title;
 
-    @Column(length = 4)
-    private String year;
+    @Column(length = 24)
+    private String date;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
@@ -40,6 +43,9 @@ public class Books {
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
 
+    @Column(length = 255)
+    private String content;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
     
@@ -48,10 +54,13 @@ public class Books {
 
     private boolean isDeleted = false;
     
-    public Books(String title, String year, Author author, Publisher publisher) {
+    public Books(String imgUrl, String title, String date, Author author, Publisher publisher, String content) {
+        this.imgUrl = imgUrl;
         this.title = title;
-        this.year = year;
+        this.date = date;
         this.author = author;
         this.publisher = publisher;
+        this.content = content;
+
     }
 }

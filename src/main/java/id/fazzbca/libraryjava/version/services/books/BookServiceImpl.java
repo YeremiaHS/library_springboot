@@ -1,6 +1,6 @@
 package id.fazzbca.libraryjava.version.services.books;
 
-import java.util.ArrayList;
+// import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -54,7 +54,7 @@ AuthorValidation authorValidation;
         publisherValidation.validatePublisher(publisher);
 
         //objek entitias dari book
-        Books book = new Books(request.getJudul(), request.getTahunTerbit(), author, publisher);
+        Books book = new Books(request.getImgUrl(), request.getJudul(), request.getTanggalTerbit(), author, publisher, request.getKonten());
 
         //save ke db
         bookRepository.save(book);
@@ -65,15 +65,15 @@ AuthorValidation authorValidation;
     }
 
     @Override
-    public ResponseEntity<?> getBookService(Boolean isDeleted) {
-        List<Books> books = new ArrayList<>();
+    public ResponseEntity<?> getBookService() {
+        List<Books> books = bookRepository.showBooks();
 
         //cek isDeleted null atau tidak
-        if (isDeleted == null) {
-            books = bookRepository.findAll();
-        } else{
-            books = bookRepository.findByIsDeleted(isDeleted);
-        }
+        // if (isDeleted == null) {
+        //     books = bookRepository.findAll();
+        // } else{
+        //     books = bookRepository.showBooks();
+        // }
 
         //return response
         return ResponseHandler.responseData(200, "success", books);
@@ -94,12 +94,16 @@ AuthorValidation authorValidation;
             throw new NoSuchElementException("Book not found");
         });
 
+        if (request.getImgUrl() != "") {
+            book.setImgUrl(request.getImgUrl());
+        }
+
         if (request.getJudul() != "") {
             book.setTitle(request.getJudul());
         }
 
-        if (request.getTahunTerbit() != "") {
-            book.setYear(request.getTahunTerbit());
+        if (request.getTanggalTerbit() != "") {
+            book.setDate(request.getTanggalTerbit());
         }
 
         if (request.getNamaPengarang() != "") {
@@ -112,6 +116,10 @@ AuthorValidation authorValidation;
             Publisher publisher = publisherRepository.findByName(request.getNamaPenerbit());
             publisherValidation.validatePublisher(publisher);
             book.setPublisher(publisher);
+        }
+
+        if (request.getKonten() != "") {
+            book.setContent(request.getKonten());
         }
         
 

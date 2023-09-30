@@ -21,7 +21,7 @@ public class PublisherController {
     @Autowired
     PublisherService publisherService;
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<?> createPublisher(@RequestBody PublisherRequest request) {
         //try {
             return publisherService.addPublisherService(request);
